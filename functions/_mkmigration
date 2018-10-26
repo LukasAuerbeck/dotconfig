@@ -1,0 +1,37 @@
+#!/bin/bash
+mkmigration() {
+  local name
+  local migrations_path
+  while true; do
+    local param="${1:-}"
+    case "${param}" in
+      "--name")
+        shift
+        name="${1:-}"
+        shift
+        ;;
+      "--path")
+        shift
+        migrations_path="${1:-}"
+        shift
+        ;;
+      "--help" | "-h")
+        echo "mkmigration --name NAME [--path PATH]"
+        return 0
+        ;;
+      *)
+        break
+    esac
+  done
+  if [ -z "${name}" ]; then
+    echo "name of the file must be given as a parameter"
+    return 1
+  fi
+  local timestamp="$(date +%s)"
+  if [ -z "${migrations_path}" ]; then
+    migrations_path="."
+  fi
+
+  touch "${migrations_path}/${timestamp}_${name}.up.sql"
+  touch "${migrations_path}/${timestamp}_${name}.down.sql"
+}

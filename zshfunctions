@@ -1,0 +1,14 @@
+workspace() {
+  cd "/Volumes/workspace/$1"
+}
+compctl -W /Volumes/workspace -/ workspace
+
+grepr() {
+  local searchString="${1}"
+  local directory="${2:-.}"
+  grep --exclude-dir={.git,node_modules,.idea} -rnw "${directory}" -e "${searchString}"
+}
+
+findf() {
+  find . -name "*${1}*" | grep -E --color "${1}"
+}

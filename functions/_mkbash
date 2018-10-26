@@ -1,0 +1,47 @@
+#!/bin/bash
+
+mkbash() {
+  local name
+  name="${1:-}"
+  if [ -z "${name}" ]; then
+    echo "Must provide script name as parameter"
+    return 1
+  fi
+
+  if [ -f "${name}" ]; then
+    echo "File with name ${name} already exists. Delete file (Y/n)?"
+    local response
+    read response
+    if [ "${response}" = "y" ] ||
+       [ "${response}" = "Y" ] ||
+       [ "${response}" = "yes" ] ||
+       [ "${response}" = "" ]; then
+      rm "${name}"
+    else
+      return 0
+    fi
+  fi
+
+  cat > "${name}" << EOF  
+#!/usr/bin/env bash
+
+set -o errexit
+set -o pipefail
+set -o nounset
+# set -o xtrace
+
+__dir="\$(cd "\$(dirname "\${BASH_SOURCE[0]}")" && pwd)"
+__file="\${__dir}/\$(basename "\${BASH_SOURCE[0]}")"
+__base="\$(basename \${__file} .sh)"
+__root="\$(cd "\$(dirname "\${__dir}")" && pwd)"
+
+main() {
+
+}
+
+main "\$@"
+
+EOF
+  chmod u+x "${name}"
+  vim "${name}"
+}

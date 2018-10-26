@@ -1,0 +1,66 @@
+#!/bin/bash
+dcu() {
+  docker-compose up --build
+}
+
+db() {
+  docker build -t "${1}" .
+}
+
+drmi() {
+  local imageIds
+  if [ $# -gt 1 ] && [ "$1" = "--pattern" ]; then
+    shift
+    imageIds=( $(docker images | grep $1 | awk '{print $3}') )
+  elif [ $# -eq 0 ]; then
+    imageIds=( $(docker images -q | tr '\n' ' ') )
+  else
+    imageIds=( $(echo $@) )
+  fi
+  for id in "${imageIds[@]}"; do
+    docker rmi -f "${id}"
+  done
+}
+
+
+drm() {
+  local containerIds
+  if [ $# -gt 1 ] && [ "$1" = "--pattern" ]; then
+    containerIds="$(docker ps -a | grep $2 | awk '{print $1}')"
+  elif [ $# -eq 0 ]; then
+    containerIds="$(docker ps -a -q)"
+  else
+    containerIds="$(echo "$@" | tr ' ' '\n')"
+  fi
+
+  containerIds=( $(echo $containerIds | tr '\n' ' ') )
+
+  docker rm -f ${containerIds}
+}
+
+ds() {
+  local containerIds
+  if [ $# -gt 1 ] && [ "$1" = "--pattern" ]; then
+    containerIds="$(docker ps | grep $2 | awk '{print $1}')"
+  elif [ $# -eq 0 ]; then
+    containerIds="$(docker ps -q)"
+  else
+    containerIds=($(echo $@ | tr ' ' '\n'))
+  fi
+  
+  containerIds=( $(echo $containerIds | tr '\n' ' ') )
+  echo "docker stop ${containerIds}"
+  docker stop ${containerIds}
+}
+
+dr() {
+  docker run -it --rm ${@}
+}
+
+dli() {
+  docker images
+}
+
+dla() {
+  docker ps -a
+}
