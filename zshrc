@@ -23,7 +23,7 @@ bindkey "[D" backward-word
 
 autoload -U compinit && compinit
 
-filesToSource=( $(find ~/.zshd -type f | grep -v '.git\|.swp\|zshrc') )
+filesToSource=( $(find ~/.zshd -type f | grep -v '.git\|.swp\|zshrc\|LICENSE') )
 
 for file in "${filesToSource[@]}"; do
 	source "${file}"
