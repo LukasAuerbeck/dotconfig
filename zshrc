@@ -9,7 +9,7 @@ DISABLE_UNTRACKED_FILES_DIRTY="true"
 HIST_STAMPS="dd.mm.yyyy"
 
 plugins=(
-	docker
+  docker
   kubectl
   zsh-completions
 )
@@ -23,7 +23,7 @@ bindkey "[D" backward-word
 
 autoload -U compinit && compinit
 
-filesToSource=( $(find ~/.zshd -type f | grep -v '.git\|.swp\|zshrc\|LICENSE\|README\|vimrc') )
+filesToSource=( $(find ~/.zshd -type f | grep -v '.git\|.swp\|zshrc\|LICENSE\|README\|no_source') )
 
 for file in "${filesToSource[@]}"; do
     source "${file}"
