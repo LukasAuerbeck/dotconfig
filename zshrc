@@ -18,6 +18,8 @@ source "$ZSH/oh-my-zsh.sh"
 
 export ARCHFLAGS="-arch x86_64"
 
+export EDITOR="vim"
+
 bindkey "[C" forward-word
 bindkey "[D" backward-word
 
@@ -30,7 +32,13 @@ for file in "${filesToSource[@]}"; do
     local aliasName="$(echo "$(basename "${file}")")"
     alias "${aliasName}=vim $file"
 done
+
 if [ -d /usr/local/bin/google-cloud-sdk ]; then
     source /usr/local/bin/google-cloud-sdk/completion.zsh.inc
     source /usr/local/bin/google-cloud-sdk/path.zsh.inc
+fi
+
+# Source vte when using ubuntu and tilix
+if [ "${TILIX_ID}" ] || [ "${VTE_VERSION}" ]; then
+    source /etc/profile.d/vte.sh
 fi

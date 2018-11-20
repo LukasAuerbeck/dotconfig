@@ -13,13 +13,14 @@ drmi() {
     shift
     imageIds=( $(docker images | grep $1 | awk '{print $3}') )
   elif [ $# -eq 0 ]; then
-    imageIds=( $(docker images -q | tr '\n' ' ') )
+    imageIds=( $(docker images -q ) )
   else
     imageIds=( $(echo $@) )
   fi
-  for id in "${imageIds[@]}"; do
-    docker rmi -f "${id}"
-  done
+
+  if (( ${#imageIds[@]} != 0 )); then
+    docker rmi -f ${imageIds}
+  fi
 }
 
 
@@ -34,23 +35,9 @@ drm() {
   fi
 
   containerIds=( $(echo $containerIds | tr '\n' ' ') )
-
-  docker rm -f ${containerIds}
-}
-
-ds() {
-  local containerIds
-  if [ $# -gt 1 ] && [ "$1" = "--pattern" ]; then
-    containerIds="$(docker ps | grep $2 | awk '{print $1}')"
-  elif [ $# -eq 0 ]; then
-    containerIds="$(docker ps -q)"
-  else
-    containerIds=($(echo $@ | tr ' ' '\n'))
+  if (( ${#containerIds[@]} != 0 )); then
+    docker rm -f ${containerIds}
   fi
-  
-  containerIds=( $(echo $containerIds | tr '\n' ' ') )
-  echo "docker stop ${containerIds}"
-  docker stop ${containerIds}
 }
 
 dr() {
