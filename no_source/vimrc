@@ -1,3 +1,18 @@
+set nocompatible
+filetype off
+
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
+
+Plugin 'VundleVim/Vundle.vim'
+Plugin 'tpope/vim-fugitive'
+Plugin 'rstacruz/sparkup', {'rtp': 'vim/'}
+Plugin 'kongo2002/fsharp-vim'
+
+call vundle#end()
+filetype plugin indent on
+
+
 set tabstop=4
 set shiftwidth=4
 set softtabstop=4
@@ -18,4 +33,5 @@ nnoremap ,<space> :nohlsearch<CR>
 
 color ron
 syntax enable
+
 
