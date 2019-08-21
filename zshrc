@@ -38,6 +38,9 @@ if [ -d /usr/local/bin/google-cloud-sdk ]; then
     source /usr/local/bin/google-cloud-sdk/path.zsh.inc
 fi
 
+if [ -f "$HOME/google-cloud-sdk/path.zsh.inc" ]; then source "$HOME/google-cloud-sdk/path.zsh.inc"; fi
+if [ -f "$HOME/google-cloud-sdk/completion.zsh.inc" ]; then source "$HOME/google-cloud-sdk/completion.zsh.inc"; fi
+
 # Source vte when using ubuntu and tilix
 if [ "${TILIX_ID}" ] || [ "${VTE_VERSION}" ]; then
     source /etc/profile.d/vte.sh
@@ -47,3 +50,18 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
+if [ -f ~/.zshenv ]; then
+    source ~/.zshenv
+fi
+
+if [ -f ~/.zshaliases ]; then
+    source ~/.zshaliases
+fi
+
+wi() {
+    q="${1}"
+    awk -v RS= "/${q}/" ~/.ssh/config
+}
+
+export LC_CTYPE=en_US.UTF-8
+export LC_ALL=en_US.UTF-8
