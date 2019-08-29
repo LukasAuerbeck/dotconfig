@@ -8,6 +8,21 @@ mkbash() {
     return 1
   fi
 
+  local dir="$(dirname "${name}")"
+  if [ ! -d "${dir}" ]; then
+    echo "Directory ${dir} doesn't exist, create it (Y/n)?"
+    local response
+    read response
+    if [ "${response}" = "y" ] ||
+       [ "${response}" = "Y" ] ||
+       [ "${response}" = "yes" ] ||
+       [ "${response}" = "" ]; then
+      mkdir -p "${dir}"
+    else
+      return 0
+    fi
+  fi
+
   if [ -f "${name}" ]; then
     echo "File with name ${name} already exists. Delete file (Y/n)?"
     local response
@@ -27,8 +42,6 @@ mkbash() {
 
 set -o errexit
 set -o pipefail
-set -o nounset
-# set -o xtrace
 
 __dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 __file="${__dir}/$(basename "${BASH_SOURCE[0]}")"
