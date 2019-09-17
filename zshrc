@@ -48,8 +48,8 @@ fi
 
 export NVM_DIR="$HOME/.nvm"
 if [ "$(uname -s)" = Darwin ]; then
-    [ -s "$(brew --prefix nvm)/nvm.sh" ] && \. "$(brew --prefix nvm)/nvm.sh"
-    [ -s "$(brew --prefix nvm)/bash_completion" ] && \. "$(brew --prefix nvm)/bash_completion"
+    NVM_INSTALL_DIR="$(brew --prefix nvm)"
+    [ -s "${NVM_INSTALL_DIR}/nvm.sh" ] && \. "${NVM_INSTALL_DIR}/nvm.sh" --no-use
 else
     [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
     [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
