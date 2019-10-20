@@ -70,3 +70,7 @@ if [ -f "$HOME/.zshenv" ]; then
     source "$HOME/.zshenv"
 fi
 
+if ! [ -z "${MASTER_PROJECT_DIR}" ]; then
+    alias buildMasterThesis="${MASTER_PROJECT_DIR}/bin/latex-builder zsh -c "source /home/dev_user/.zshrc && /home/dev_user/mse-master-project/docs/master-thesis/bin/build.sh""
+fi
+
