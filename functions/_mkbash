@@ -1,6 +1,13 @@
 #!/bin/bash
 
 mkbash() {
+  for param in "${@}"; do
+    if [[ "${param}" = "-h" ]] || [[ "${param}" = "--help" ]]; then
+      echo "Usage: mkbash path"
+      return 1
+    fi
+  done
+
   local name
   name="${1:-}"
   if [ -z "${name}" ]; then
