@@ -34,4 +34,4 @@ nnoremap ,<space> :nohlsearch<CR>
 color ron
 syntax enable
 
-
+autocmd FileType sh setlocal shiftwidth=2 softtabstop=2 expandtab
