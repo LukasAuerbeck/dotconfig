@@ -51,3 +51,4 @@ dli() {
 dla() {
   docker ps -a
 }
+

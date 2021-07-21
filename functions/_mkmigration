@@ -35,3 +35,4 @@ mkmigration() {
   touch "${migrations_path}/${timestamp}_${name}.up.sql"
   touch "${migrations_path}/${timestamp}_${name}.down.sql"
 }
+
