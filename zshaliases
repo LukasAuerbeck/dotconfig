@@ -13,16 +13,3 @@ alias ga="git add"
 alias g="git "
 alias gd="git diff "
 alias gb="git branch "
-
-# other aliases
-alias bachelor="cd ~/Desktop/bachelor_arbeit"
-alias 1git="cd /Volumes/workspace/go/src/gitlab.com/1git/1git/"
-
-# go aliases
-alias gometalinter="gometalinter.v2 ./..."
-
-alias docker_pgsql="dr -p 5432:5432 -v \"$GOPATH/src/gitlab.com/1git/1git/services/core/sql/pgdata/:/var/lib/postgresql/data\" registry.gitlab.com/1git/1git/postgres:latest"
-alias docker_pgsql_tmp="dr -p 5432:5432 registry.gitlab.com/1git/1git/postgres:latest"
-
-alias ml="matlab -nodesktop -nosplash"
-

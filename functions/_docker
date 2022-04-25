@@ -1,4 +1,5 @@
 #!/bin/bash
+
 dcu() {
   docker-compose up --build
 }
@@ -22,8 +23,6 @@ drmi() {
     docker rmi -f ${imageIds}
   fi
 }
-
-
 drm() {
   local containerIds
   if [ $# -gt 1 ] && [ "$1" = "--pattern" ]; then
@@ -51,4 +50,3 @@ dli() {
 dla() {
   docker ps -a
 }
-

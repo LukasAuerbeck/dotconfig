@@ -16,6 +16,9 @@ plugins=(
 
 source "$ZSH/oh-my-zsh.sh"
 
+unalias dr
+unalias drm
+
 export ARCHFLAGS="-arch x86_64"
 
 export EDITOR="vim"
@@ -94,3 +97,13 @@ if [ -f "${SSH_ENV}" ]; then
 else
      start_agent;
 fi
+
+function multi_line_prompt {
+    export PROMPT=$'[%*] %{$fg[cyan]%}%n%{$reset_color%}:%{$fg[green]%}%c%{$reset_color%}$(git_prompt_info) \n%(!.#.$) '
+}
+
+function single_line_prompt {
+    export PROMPT=$'[%*] %{$fg[cyan]%}%n%{$reset_color%}:%{$fg[green]%}%c%{$reset_color%}$(git_prompt_info) %(!.#.$) '
+}
+
+source <(template-service completion zsh)
