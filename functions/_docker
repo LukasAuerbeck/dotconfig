@@ -23,6 +23,7 @@ drmi() {
     docker rmi -f ${imageIds}
   fi
 }
+
 drm() {
   local containerIds
   if [ $# -gt 1 ] && [ "$1" = "--pattern" ]; then

@@ -1,0 +1,51 @@
+#!/bin/bash
+
+mgs() {
+  local "pwd=$(pwd)"
+  for d in $(find . -type d -maxdepth 1 | sed 's/\.\///g' | tail -n +2); do
+    echo ; echo ; echo ; echo "${pwd}/$d"
+    cd "${pwd}/$d"
+    git status
+  done
+  cd ${pwd}
+}
+
+mga() {
+  local "pwd=$(pwd)"
+  for d in $(find . -type d -maxdepth 1 | sed 's/\.\///g' | tail -n +2); do
+    local fullPath="${pwd}/$d"
+    echo ; echo ; echo ; echo "${fullPath}"
+    cd "${fullPath}"
+    git status
+
+    echo -n "Add all files (Y/n)?"
+    read choice
+    case "$choice" in
+      n|N ) echo "not adding any files, skipping repo ${fullPath}"; continue ;;
+      y|Y|"" ) echo "adding all files for repo ${fullPath}"; git add . ;;
+      * ) echo "invalid value, must be y or n"; cd ${pwd}; return 1 ;;
+    esac
+  done
+  cd ${pwd}
+}
+
+mcreateBranch() {
+  local "pwd=$(pwd)"
+  for d in $(find . -type d -maxdepth 1 | sed 's/\.\///g' | tail -n +2); do
+    local fullPath="${pwd}/$d"
+    echo ; echo ; echo ; echo "${fullPath}"
+    cd "${fullPath}"
+    git status
+
+    echo -n "Commit all files in this repo (Y/n)?"
+    read choice
+    case "$choice" in
+      n|N ) echo "not adding any files, skipping repo ${fullPath}"; continue ;;
+      y|Y|"" ) echo "adding all files for repo ${fullPath}"; git add . ;;
+      * ) echo "invalid value, must be y or n"; cd ${pwd}; return 1 ;;
+    esac
+
+    createBranch ${@}
+  done
+  cd ${pwd}
+}

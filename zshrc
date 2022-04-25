@@ -28,9 +28,10 @@ bindkey "[D" backward-word
 
 autoload -U compinit && compinit
 
-filesToSource=( $(find ~/.zshd -type f | grep -v '.git\|.swp\|zshrc\|LICENSE\|README\|no_source') )
+filesToSource=( $(find ~/.zshd -type f | grep -v '\.git\|\.swp\|zshrc\|LICENSE\|README\|no_source') )
 
 for file in "${filesToSource[@]}"; do
+    echo "sourcing ${file}"
     source "${file}"
     local aliasName="$(echo "$(basename "${file}")")"
     alias "${aliasName}=vim $file"
