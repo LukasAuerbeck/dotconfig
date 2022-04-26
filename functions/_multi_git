@@ -18,7 +18,7 @@ mga() {
     cd "${fullPath}"
 
     # skip dir if it is not a git repo
-    git rev-parse --is-inside-work-tree || continue
+    git rev-parse --is-inside-work-tree 2> /dev/null || continue
 
     git status
 
@@ -41,7 +41,7 @@ mgl() {
     cd "${fullPath}"
 
     # skip dir if it is not a git repo
-    git rev-parse --is-inside-work-tree || continue
+    git rev-parse --is-inside-work-tree 2> /dev/null || continue
 
     gco main
     git pull
@@ -57,7 +57,7 @@ mcreateBranch() {
     cd "${fullPath}"
 
     # skip dir if it is not a git repo
-    git rev-parse --is-inside-work-tree || continue
+    git rev-parse --is-inside-work-tree 2> /dev/null || continue
 
     git status
 
