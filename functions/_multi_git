@@ -18,7 +18,7 @@ mga() {
     cd "${fullPath}"
 
     # skip dir if it is not a git repo
-    git rev-parse --is-inside-work-tree 2> /dev/null || continue
+    git rev-parse --is-inside-work-tree 2> /dev/null > /dev/null || continue
 
     git status
 
@@ -41,10 +41,40 @@ mgl() {
     cd "${fullPath}"
 
     # skip dir if it is not a git repo
-    git rev-parse --is-inside-work-tree 2> /dev/null || continue
+    git rev-parse --is-inside-work-tree 2> /dev/null > /dev/null || continue
 
-    gco main
+    gco main || gco master
     git pull
+  done
+  cd ${pwd}
+}
+
+mgb() {
+  local "pwd=$(pwd)"
+  for d in $(find . -type d -maxdepth 1 | sed 's/\.\///g' | tail -n +2); do
+    local fullPath="${pwd}/$d"
+    echo -n "${fullPath}: "
+    cd "${fullPath}"
+
+    # skip dir if it is not a git repo
+    git rev-parse --is-inside-work-tree 2> /dev/null > /dev/null || { echo "no git repo" ; continue }
+
+    git branch --show-current
+  done
+  cd ${pwd}
+}
+
+mgDeleteMergedBranches() {
+  local "pwd=$(pwd)"
+  for d in $(find . -type d -maxdepth 1 | sed 's/\.\///g' | tail -n +2); do
+    local fullPath="${pwd}/$d"
+    echo -n "${fullPath}: "
+    cd "${fullPath}"
+
+    # skip dir if it is not a git repo
+    git rev-parse --is-inside-work-tree 2> /dev/null > /dev/null || { echo "no git repo" ; continue }
+
+    git branch --merged | egrep -v "(^\*|master|main|dev)" | xargs git branch -d
   done
   cd ${pwd}
 }
@@ -57,7 +87,7 @@ mcreateBranch() {
     cd "${fullPath}"
 
     # skip dir if it is not a git repo
-    git rev-parse --is-inside-work-tree 2> /dev/null || continue
+    git rev-parse --is-inside-work-tree 2> /dev/null > /dev/null || continue
 
     git status
 
