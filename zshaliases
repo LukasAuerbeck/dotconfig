@@ -12,4 +12,7 @@ alias gcm="git commit -m "
 alias ga="git add"
 alias g="git "
 alias gd="git diff "
+alias gdmb='git branch --merged | egrep -v " (master|main|dev)" | xargs git branch -d'
+alias gdmbForce='git branch | egrep -v " (master|main|dev)" | xargs git branch -D'
 alias gb="git branch "
+
