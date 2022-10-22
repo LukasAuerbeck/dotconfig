@@ -110,3 +110,5 @@ function single_line_prompt {
 source <(template-service completion zsh)
 source <(helmfile completion zsh)
 source <(cilium completion zsh)
+source <(talosctl completion zsh)
+source <(clusterctl completion zsh)
