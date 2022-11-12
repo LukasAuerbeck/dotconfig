@@ -99,8 +99,20 @@ else
      start_agent;
 fi
 
+function kube_prompt {
+    local context
+    local ns
+    local kubeConfig
+
+    context="$(kubectl config current-context | sed 's/.*@//g')"
+    ns="$(kubectl config view --minify -o jsonpath='{..namespace}')"
+    kubeConfig="$(echo $KUBECONFIG | sed 's/.*kube\///g')"
+
+    echo "[%{$fg[green]%}$kubeConfig%{$reset_color%} (%{$fg[red]%}$context%{$reset_color%}:%{$fg[cyan]%}$ns%{$reset_color%})]"
+}
+
 function multi_line_prompt {
-    export PROMPT=$'[%*] %{$fg[cyan]%}%n%{$reset_color%}:%{$fg[green]%}%c%{$reset_color%}$(git_prompt_info) \n%(!.#.$) '
+    export PROMPT=$'[%*] %{$fg[cyan]%}%n%{$reset_color%}:%{$fg[green]%}%c%{$reset_color%}$(git_prompt_info) $(kube_prompt)\n%(!.#.$) '
 }
 
 function single_line_prompt {
