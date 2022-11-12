@@ -1,0 +1,17 @@
+#!/bin/bash
+
+kRestartAll() {
+   for ns in `kubectl get ns --no-headers --output name | sed 's/namespace\///g'`; do
+    for deployment in `kubectl get deployments --no-headers -n "${ns}" --output name | sed 's/deployment\.apps\///g'`; do
+      kubectl rollout restart deployment -n "${ns}" "${deployment}"
+    done
+
+    for statefulset in `kubectl get statefulset --no-headers -n "${ns}" --output name | sed 's/statefulset\.apps\///g'`; do
+      kubectl rollout restart statefulset -n "${ns}" "${statefulset}"
+    done
+
+    for daemonset in `kubectl get daemonset --no-headers -n "${ns}" --output name | sed 's/daemonset\.apps\///g'`; do
+      kubectl rollout restart daemonset -n "${ns}" "${daemonset}"
+    done
+  done
+}

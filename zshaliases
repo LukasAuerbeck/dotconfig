@@ -1,6 +1,7 @@
 # custom aliases to reload/open zshrc config
 alias zshrc="vim ~/.zshd/zshrc"
 alias zshreload=". ~/.zshrc"
+alias zshenv=". ~/.zshd/zshenv"
 
 # custom git aliases
 alias gl="git pull"
@@ -15,4 +16,3 @@ alias gd="git diff "
 alias gdmb='git branch --merged | egrep -v " (master|main|dev)" | xargs git branch -d'
 alias gdmbForce='git branch | egrep -v " (master|main|dev)" | xargs git branch -D'
 alias gb="git branch "
-
