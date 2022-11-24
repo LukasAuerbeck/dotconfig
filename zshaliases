@@ -1,5 +1,4 @@
 # custom aliases to reload/open zshrc config
-alias zshrc="vim ~/.zshd/zshrc"
 alias zshreload=". ~/.zshrc"
 alias zshenv=". ~/.zshd/zshenv"
 

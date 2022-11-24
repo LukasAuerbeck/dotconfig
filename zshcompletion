@@ -1,0 +1,7 @@
+source <(samctl completion zsh)
+
+source <(helmfile completion zsh)
+source <(cilium completion zsh)
+source <(talosctl completion zsh)
+source <(clusterctl completion zsh)
+source <(scw autocomplete script)

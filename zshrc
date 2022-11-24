@@ -14,21 +14,24 @@ plugins=(
   zsh-completions
 )
 
+export FPATH="$FPATH:/opt/homebrew/share/zsh/site-functions"
+
+# automatically runs autoload / compinit
 source "$ZSH/oh-my-zsh.sh"
 
 unalias dr
 unalias drm
 
-export ARCHFLAGS="-arch x86_64"
+#export ARCHFLAGS="-arch x86_64"
 
 export EDITOR="vim"
 
 bindkey "[C" forward-word
 bindkey "[D" backward-word
 
-autoload -U compinit && compinit
+source ~/.zshd/zshenv
 
-filesToSource=( $(find ~/.zshd -type f | grep -v '\.git\|\.swp\|zshrc\|LICENSE\|README\|no_source') )
+filesToSource=( $(find ~/.zshd -type f | grep -v '\.git\|\.swp\|zshrc\|LICENSE\|README\|no_source\|zshenv') )
 
 for file in "${filesToSource[@]}"; do
     echo "sourcing ${file}"
@@ -120,10 +123,3 @@ function single_line_prompt {
 }
 
 multi_line_prompt
-
-source <(template-service completion zsh)
-source <(helmfile completion zsh)
-source <(cilium completion zsh)
-source <(talosctl completion zsh)
-source <(clusterctl completion zsh)
-source <(scw autocomplete script)
