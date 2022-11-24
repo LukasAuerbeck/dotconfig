@@ -119,8 +119,11 @@ function single_line_prompt {
     export PROMPT=$'[%*] %{$fg[cyan]%}%n%{$reset_color%}:%{$fg[green]%}%c%{$reset_color%}$(git_prompt_info) %(!.#.$) '
 }
 
+multi_line_prompt
+
 source <(template-service completion zsh)
 source <(helmfile completion zsh)
 source <(cilium completion zsh)
 source <(talosctl completion zsh)
 source <(clusterctl completion zsh)
+source <(scw autocomplete script)

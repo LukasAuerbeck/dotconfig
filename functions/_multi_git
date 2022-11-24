@@ -107,9 +107,24 @@ mgDeleteMergedBranches() {
 
     git checkout main || git checkout master
 
-    git branch --merged | egrep -v " (main|master)" | xargs git branch -d
-    
-    echo
+    git branch --merged | egrep -v " (master|main|dev)" | xargs git branch -d
+  done
+  cd ${pwd}
+}
+
+mgDeleteMergedBranchesForce() {
+  local "pwd=$(pwd)"
+  for d in $(find . -type d -maxdepth 1 | sed 's/\.\///g' | tail -n +2); do
+    local fullPath="${pwd}/$d"
+    echo "${fullPath}: "
+    cd "${fullPath}"
+
+    # skip dir if it is not a git repo
+    git rev-parse --is-inside-work-tree 2> /dev/null > /dev/null || { echo "no git repo" ; continue }
+
+    git checkout main || git checkout master
+
+    git branch | egrep -v " (master|main|dev)" | xargs git branch -D
   done
   cd ${pwd}
 }
