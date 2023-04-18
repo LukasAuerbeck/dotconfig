@@ -1,7 +1,18 @@
-source <(samctl completion zsh)
-
-source <(helmfile completion zsh)
-source <(cilium completion zsh)
-source <(talosctl completion zsh)
-source <(clusterctl completion zsh)
-source <(scw autocomplete script)
+if command -v samctl &> /dev/null; then
+  source <(samctl completion zsh)
+fi
+if command -v helmfile &> /dev/null; then
+  source <(helmfile completion zsh)
+fi
+if command -v cilium &> /dev/null; then
+  source <(cilium completion zsh)
+fi
+if command -v talosctl &> /dev/null; then
+  source <(talosctl completion zsh)
+fi
+if command -v clusterctl &> /dev/null; then
+  source <(clusterctl completion zsh)
+fi
+if command -v scw &> /dev/null; then
+  source <(scw autocomplete script)
+fi

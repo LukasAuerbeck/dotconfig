@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 mgs() {
   local "pwd=$(pwd)"
@@ -34,17 +34,50 @@ mga() {
 }
 
 mgl() {
+  set +x
+  local recursive=false
+  if [[ "${1}" = "--recursive" ]]; then
+    recursive=true
+  fi
   local "pwd=$(pwd)"
   for d in $(find . -type d -maxdepth 1 | sed 's/\.\///g' | tail -n +2); do
     local fullPath="${pwd}/$d"
-    echo ; echo ; echo ; echo "${fullPath}"
+    echo -n "${fullPath}: "
     cd "${fullPath}"
 
-    # skip dir if it is not a git repo
-    git rev-parse --is-inside-work-tree 2> /dev/null > /dev/null || continue
+    folderName="$(basename "${fullPath}")"
 
-    git checkout main || git checkout master
-    git pull
+    if [[ "${folderName}" = ".terraform" ]]; then
+      echo "skipping ignore folder"
+      continue
+    fi
+
+    if ${recursive}; then
+      git rev-parse --is-inside-work-tree 2> /dev/null > /dev/null || {
+        echo "recursively pulling folder"
+        mgl --recursive
+        continue
+      }
+    else
+      # skip dir if it is not a git repo
+      git rev-parse --is-inside-work-tree 2>/dev/null > /dev/null || {
+        echo skipping
+        continue
+      }
+    fi
+
+    (git checkout main 2>/dev/null > /dev/null || git checkout master 2>/dev/null > /dev/null) || {
+      echo "error: failed to checkout main/master branch"
+      continue
+    }
+    pullOutput="$(git pull 2>/dev/null)"
+    rc="$?"
+    if [[ "${rc}" = "0" ]]; then
+      echo "successfully pulled changes (rc $rc)"
+    else
+      echo "error (rc $rc)"
+      git pull
+    fi
   done
   cd ${pwd}
 }
@@ -84,13 +117,36 @@ mgEmail() {
   local "pwd=$(pwd)"
   for d in $(find . -type d -maxdepth 1 | sed 's/\.\///g' | tail -n +2); do
     local fullPath="${pwd}/$d"
-    echo -n "${fullPath}: "
+    echo "${fullPath}"
     cd "${fullPath}"
 
     # skip dir if it is not a git repo
     git rev-parse --is-inside-work-tree 2> /dev/null > /dev/null || { echo "no git repo" ; continue }
 
-    git config --list | grep "user.email" | sed 's/user\.email=//g'
+    git config --list | grep "user.email" | sed 's/user\.email=/  - /g'
+  done
+  cd ${pwd}
+}
+
+mgConfigureEmail() {
+  local "pwd=$(pwd)"
+  local email
+  email="${1}"
+
+  if [[ -z "${email}" ]]; then
+    echo "email must be provided as argument"
+    return 1
+  fi
+
+  for d in $(find . -type d -maxdepth 1 | sed 's/\.\///g' | tail -n +2); do
+    local fullPath="${pwd}/$d"
+    echo "configuring email for ${fullPath}"
+    cd "${fullPath}"
+
+    # skip dir if it is not a git repo
+    git rev-parse --is-inside-work-tree 2> /dev/null > /dev/null || { echo "no git repo" ; continue }
+
+    git config --local user.email "${1}"
   done
   cd ${pwd}
 }
