@@ -1,6 +1,15 @@
 if command -v samctl &> /dev/null; then
   source <(samctl completion zsh)
 fi
+if command -v skinboxctl &> /dev/null; then
+  source <(skinboxctl completion zsh)
+fi
+if command -v skinportctl &> /dev/null; then
+  source <(skinportctl completion zsh)
+fi
+if command -v demo-cli &> /dev/null; then
+  source <(demo-cli completion zsh)
+fi
 if command -v helmfile &> /dev/null; then
   source <(helmfile completion zsh)
 fi
@@ -15,4 +24,7 @@ if command -v clusterctl &> /dev/null; then
 fi
 if command -v scw &> /dev/null; then
   source <(scw autocomplete script)
+fi
+if command -v flux &> /dev/null; then
+  source <(flux autocomplete script)
 fi
