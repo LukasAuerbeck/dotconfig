@@ -78,12 +78,6 @@ if [ -f "$HOME/.zshenv" ]; then
   source "$HOME/.zshenv"
 fi
 
-if [ -d "$HOME/.nvm" ]; then
-  export NVM_DIR="$HOME/.nvm"
-  [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-  [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
-fi
-
 SSH_ENV=$HOME/.ssh/environment
 
 function start_agent {
