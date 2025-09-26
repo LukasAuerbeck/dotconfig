@@ -1,0 +1,62 @@
+#!/bin/bash
+
+createBranch() {
+  local commitMsg
+  local branchName
+
+  while true; do
+    case $1 in
+      "--commit")
+        shift
+        commitMsg="$1"
+        shift
+        ;;
+      *)
+        branchName="$1"
+        break
+    esac
+  done
+
+  if [ "${branchName}" = "" ]; then
+    echo "Missing branch name"
+    return 1
+  fi
+
+  if [ "$commitMsg" = "" ]; then
+    echo "Missing commit message"
+    return 1
+  fi
+
+  echo "Checking out master"
+  git checkout master || return 1
+
+  echo "Pulling latest changes"
+  git pull || return 1
+
+  echo "Creating new branch"
+  git checkout -b "${branchName}" || return 1
+
+  echo "Committing staged changes as '${commitMsg}'"
+  git commit -m "$commitMsg" || return 1
+
+  git push --set-upstream origin "${branchName}" || return 1
+
+  local pushOutput
+  pushOutput="$(git push --set-upstream origin "${branchName}" 2>&1)"
+  if ! [ $? -eq 0 ]; then
+    echo "error pushing to origin"
+    echo "${pushOutput}"
+    return 1
+  fi
+
+  echo "${pushOutput}"
+
+  local mergeRequestUrl
+  local mrTitle="${branchName}"
+
+  mergeRequestUrl="$(echo "${pushOutput}" | awk '/https/ {print $2}')&merge_request%5Btitle%5D=$mrTitle"
+
+  echo "${mergeRequestUrl}"
+
+  open "${mergeRequestUrl}"
+}

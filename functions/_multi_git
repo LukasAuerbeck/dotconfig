@@ -2,7 +2,7 @@
 
 mgs() {
   local "pwd=$(pwd)"
-  for d in $(find . -type d -maxdepth 1 | sed 's/\.\///g' | tail -n +2); do
+  for d in $(find . -maxdepth 1 -type d | sed 's/\.\///g' | tail -n +2); do
     echo ; echo ; echo ; echo "${pwd}/$d"
     cd "${pwd}/$d"
     git status
@@ -12,7 +12,7 @@ mgs() {
 
 mga() {
   local "pwd=$(pwd)"
-  for d in $(find . -type d -maxdepth 1 | sed 's/\.\///g' | tail -n +2); do
+  for d in $(find . -maxdepth 1 -type d | sed 's/\.\///g' | tail -n +2); do
     local fullPath="${pwd}/$d"
     echo ; echo ; echo ; echo "${fullPath}"
     cd "${fullPath}"
@@ -40,7 +40,7 @@ mgl() {
     recursive=true
   fi
   local "pwd=$(pwd)"
-  for d in $(find . -type d -maxdepth 1 | sed 's/\.\///g' | tail -n +2); do
+  for d in $(find . -maxdepth 1 -type d | sed 's/\.\///g' | tail -n +2); do
     local fullPath="${pwd}/$d"
     echo -n "${fullPath}: "
     cd "${fullPath}"
@@ -84,7 +84,7 @@ mgl() {
 
 mgb() {
   local "pwd=$(pwd)"
-  for d in $(find . -type d -maxdepth 1 | sed 's/\.\///g' | tail -n +2); do
+  for d in $(find . -maxdepth 1 -type d | sed 's/\.\///g' | tail -n +2); do
     local fullPath="${pwd}/$d"
     echo -n "${fullPath}: "
     cd "${fullPath}"
@@ -99,7 +99,7 @@ mgb() {
 
 mgbAll() {
   local "pwd=$(pwd)"
-  for d in $(find . -type d -maxdepth 1 | sed 's/\.\///g' | tail -n +2); do
+  for d in $(find . -maxdepth 1 -type d | sed 's/\.\///g' | tail -n +2); do
     local fullPath="${pwd}/$d"
     echo
     echo "${fullPath}: "
@@ -115,7 +115,7 @@ mgbAll() {
 
 mgEmail() {
   local "pwd=$(pwd)"
-  for d in $(find . -type d -maxdepth 1 | sed 's/\.\///g' | tail -n +2); do
+  for d in $(find . -maxdepth 1 -type d | sed 's/\.\///g' | tail -n +2); do
     local fullPath="${pwd}/$d"
     echo "${fullPath}"
     cd "${fullPath}"
@@ -138,7 +138,7 @@ mgConfigureEmail() {
     return 1
   fi
 
-  for d in $(find . -type d -maxdepth 1 | sed 's/\.\///g' | tail -n +2); do
+  for d in $(find . -maxdepth 1 -type d | sed 's/\.\///g' | tail -n +2); do
     local fullPath="${pwd}/$d"
     echo "configuring email for ${fullPath}"
     cd "${fullPath}"
@@ -153,7 +153,7 @@ mgConfigureEmail() {
 
 mgDeleteMergedBranches() {
   local "pwd=$(pwd)"
-  for d in $(find . -type d -maxdepth 1 | sed 's/\.\///g' | tail -n +2); do
+  for d in $(find . -maxdepth 1 -type d | sed 's/\.\///g' | tail -n +2); do
     local fullPath="${pwd}/$d"
     echo "${fullPath}: "
     cd "${fullPath}"
@@ -170,7 +170,7 @@ mgDeleteMergedBranches() {
 
 mgDeleteMergedBranchesForce() {
   local "pwd=$(pwd)"
-  for d in $(find . -type d -maxdepth 1 | sed 's/\.\///g' | tail -n +2); do
+  for d in $(find . -maxdepth 1 -type d | sed 's/\.\///g' | tail -n +2); do
     local fullPath="${pwd}/$d"
     echo "${fullPath}: "
     cd "${fullPath}"
@@ -187,7 +187,7 @@ mgDeleteMergedBranchesForce() {
 
 mgitStash() {
   local "pwd=$(pwd)"
-  for d in $(find . -type d -maxdepth 1 | sed 's/\.\///g' | tail -n +2); do
+  for d in $(find . -maxdepth 1 -type d | sed 's/\.\///g' | tail -n +2); do
     local fullPath="${pwd}/$d"
     echo ; echo ; echo ; echo "${fullPath}"
     cd "${fullPath}"
@@ -202,7 +202,7 @@ mgitStash() {
 
 mcreateBranch() {
   local "pwd=$(pwd)"
-  for d in $(find . -type d -maxdepth 1 | sed 's/\.\///g' | tail -n +2); do
+  for d in $(find . -maxdepth 1 -type d | sed 's/\.\///g' | tail -n +2); do
     local fullPath="${pwd}/$d"
     echo ; echo ; echo ; echo "${fullPath}"
     cd "${fullPath}"

@@ -8,6 +8,12 @@ findf() {
   find . -name "*${1}*" | grep -E --color "${1}"
 }
 
+if which xsel > /dev/null; then
+  pbcopy() {
+    xsel -ib
+  }
+fi
+
 url_encode() {
   python3 -c "from urllib.parse import quote; print(quote('${1}'));"
 }
