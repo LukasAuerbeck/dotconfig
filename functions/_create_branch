@@ -39,8 +39,6 @@ createBranch() {
   echo "Committing staged changes as '${commitMsg}'"
   git commit -m "$commitMsg" || return 1
 
-  git push --set-upstream origin "${branchName}" || return 1
-
   local pushOutput
   pushOutput="$(git push --set-upstream origin "${branchName}" 2>&1)"
   if ! [ $? -eq 0 ]; then
