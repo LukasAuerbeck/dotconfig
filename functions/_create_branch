@@ -56,5 +56,5 @@ createBranch() {
 
   echo "${mergeRequestUrl}"
 
-  open "${mergeRequestUrl}"
+  brave --new-window "${mergeRequestUrl}"
 }

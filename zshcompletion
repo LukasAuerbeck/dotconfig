@@ -28,3 +28,8 @@ fi
 if command -v flux &> /dev/null; then
   source <(flux autocomplete script)
 fi
+if command -v terraform &> /dev/null; then
+  if [[ "$(uname)" = "Linux" ]]; then
+    complete -o nospace -C /snap/terraform/830/terraform terraform
+  fi
+fi
