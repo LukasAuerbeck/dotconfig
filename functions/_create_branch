@@ -1,30 +1,71 @@
 #!/bin/bash
 
-createBranch() {
-  local commitMsg
-  local branchName
+createBranch () {
+  local commitMsg=""
+  local branchName=""
 
-  while true; do
-    case $1 in
-      "--commit")
+  toSlug() {
+    local s="${1}"
+    printf '%s' "${s}" \
+      | tr '[:upper:]' '[:lower:]' \
+      | sed -E \
+          -e 's/[_[:space:]]+/-/g' \
+          -e 's/[^a-z0-9-]+/-/g' \
+          -e 's/-+/-/g' \
+          -e 's/^-+//; s/-+$//'
+  }
+
+  trim() {
+    printf '%s' "${1}" | sed -E 's/^[[:space:]]+//; s/[[:space:]]+$//'
+  }
+
+  deriveBranchFromCommit() {
+    local msg="${1}"
+    local type=""
+    local rest=""
+
+    [[ "${msg}" == *:* ]] || return 1
+
+    type="$(trim "${msg%%:*}")"
+    rest="$(trim "${msg#*:}")"
+
+    type="$(toSlug "${type}")"
+    rest="$(toSlug "${rest}")"
+
+    [[ -n "${type}" && -n "${rest}" ]] || return 1
+    printf '%s/%s' "${type}" "${rest}"
+  }
+
+  while [[ ${#} -gt 0 ]]; do
+    case "${1}" in
+      --commit)
         shift
-        commitMsg="$1"
+        commitMsg="${1}"
+        shift
+        ;;
+      --branch)
+        shift
+        branchName="${1}"
         shift
         ;;
       *)
-        branchName="$1"
-        break
+        branchName="${1}"
+        shift
+        ;;
     esac
   done
 
-  if [ "${branchName}" = "" ]; then
-    echo "Missing branch name"
+  if [[ -z "${commitMsg}" ]]; then
+    echo "Missing commit message"
     return 1
   fi
 
-  if [ "$commitMsg" = "" ]; then
-    echo "Missing commit message"
-    return 1
+  if [[ -z "${branchName}" ]]; then
+    branchName="$(deriveBranchFromCommit "${commitMsg}")" || {
+      echo "Missing branch name, and couldn't derive one from commit message."
+      echo "Expected commit format: 'type: text' (e.g. 'feat: add thing')."
+      return 1
+    }
   fi
 
   echo "Checking out master"
@@ -33,15 +74,15 @@ createBranch() {
   echo "Pulling latest changes"
   git pull || return 1
 
-  echo "Creating new branch"
+  echo "Creating new branch: ${branchName}"
   git checkout -b "${branchName}" || return 1
 
   echo "Committing staged changes as '${commitMsg}'"
-  git commit -m "$commitMsg" || return 1
+  git commit -m "${commitMsg}" || return 1
 
-  local pushOutput
+  local pushOutput=""
   pushOutput="$(git push --set-upstream origin "${branchName}" 2>&1)"
-  if ! [ $? -eq 0 ]; then
+  if ! [[ ${?} -eq 0 ]]; then
     echo "error pushing to origin"
     echo "${pushOutput}"
     return 1
@@ -49,12 +90,10 @@ createBranch() {
 
   echo "${pushOutput}"
 
-  local mergeRequestUrl
+  local mergeRequestUrl=""
   local mrTitle="${branchName}"
-
-  mergeRequestUrl="$(echo "${pushOutput}" | awk '/https/ {print $2}')&merge_request%5Btitle%5D=$mrTitle"
+  mergeRequestUrl="$(echo "${pushOutput}" | awk '/https/ {print $2}')&merge_request%5Btitle%5D=${mrTitle}"
 
   echo "${mergeRequestUrl}"
-
   brave --new-window "${mergeRequestUrl}"
 }
