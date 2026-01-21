@@ -3,6 +3,7 @@
 createBranch () {
   local commitMsg=""
   local branchName=""
+  local baseBranch=""
 
   toSlug() {
     local s="${1}"
@@ -34,6 +35,27 @@ createBranch () {
 
     [[ -n "${type}" && -n "${rest}" ]] || return 1
     printf '%s/%s' "${type}" "${rest}"
+  }
+
+  detectBaseBranch() {
+    local remoteHead=""
+    remoteHead="$(git symbolic-ref -q --short refs/remotes/origin/HEAD 2>/dev/null || true)"
+    if [[ -n "${remoteHead}" ]]; then
+      printf '%s' "${remoteHead#origin/}"
+      return 0
+    fi
+
+    if git show-ref --verify --quiet refs/heads/main || git show-ref --verify --quiet refs/remotes/origin/main; then
+      printf '%s' "main"
+      return 0
+    fi
+
+    if git show-ref --verify --quiet refs/heads/master || git show-ref --verify --quiet refs/remotes/origin/master; then
+      printf '%s' "master"
+      return 0
+    fi
+
+    return 1
   }
 
   while [[ ${#} -gt 0 ]]; do
@@ -68,8 +90,13 @@ createBranch () {
     }
   fi
 
-  echo "Checking out master"
-  git checkout master || return 1
+  baseBranch="$(detectBaseBranch)" || {
+    echo "Could not determine base branch (expected origin/HEAD, or main/master)."
+    return 1
+  }
+
+  echo "Checking out ${baseBranch}"
+  git checkout "${baseBranch}" || return 1
 
   echo "Pulling latest changes"
   git pull || return 1
