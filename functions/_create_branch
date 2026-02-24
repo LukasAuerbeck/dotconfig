@@ -39,19 +39,33 @@ createBranch () {
 
   detectBaseBranch() {
     local remoteHead=""
+
     remoteHead="$(git symbolic-ref -q --short refs/remotes/origin/HEAD 2>/dev/null || true)"
     if [[ -n "${remoteHead}" ]]; then
-      printf '%s' "${remoteHead#origin/}"
-      return 0
+      # validate the target exists; origin/HEAD can be stale
+      if git show-ref --verify --quiet "refs/remotes/${remoteHead}"; then
+        printf '%s' "${remoteHead#origin/}"
+        return 0
+      fi
     fi
 
-    if git show-ref --verify --quiet refs/heads/main || git show-ref --verify --quiet refs/remotes/origin/main; then
+    # prefer local branches
+    if git show-ref --verify --quiet refs/heads/master; then
+      printf '%s' "master"
+      return 0
+    fi
+    if git show-ref --verify --quiet refs/heads/main; then
       printf '%s' "main"
       return 0
     fi
 
-    if git show-ref --verify --quiet refs/heads/master || git show-ref --verify --quiet refs/remotes/origin/master; then
+    # then fall back to remote-tracking branches
+    if git show-ref --verify --quiet refs/remotes/origin/master; then
       printf '%s' "master"
+      return 0
+    fi
+    if git show-ref --verify --quiet refs/remotes/origin/main; then
+      printf '%s' "main"
       return 0
     fi
 
